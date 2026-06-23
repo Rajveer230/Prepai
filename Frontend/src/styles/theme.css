@@ -1,0 +1,40 @@
+/* ── Dark Theme (default) ───────────────────────────────────────────────────── */
+:root,
+[data-theme="dark"] {
+    --bg:           #0d1117;
+    --bg-card:      #161b22;
+    --bg-panel:     #1c2230;
+    --bg-input:     #1e2535;
+    --border:       #2a3348;
+    --border-rgb:   42, 51, 72;
+    --text:         #e6edf3;
+    --text-sec:     #aab2bb;
+    --muted:        #7d8590;
+    --accent:       #ff2d78;
+    --accent-rgb:   255, 45, 120;
+    --info-bg:      #1b2a4a;
+    --info-border:  #2d4a7a;
+    --info-text:    #8ab4f8;
+    --shadow:       rgba(0, 0, 0, 0.4);
+    color-scheme: dark;
+}
+
+/* ── Light Theme ────────────────────────────────────────────────────────────── */
+[data-theme="light"] {
+    --bg:           #f6f8fa;
+    --bg-card:      #ffffff;
+    --bg-panel:     #f0f3f6;
+    --bg-input:     #edf0f4;
+    --border:       #d0d7de;
+    --border-rgb:   208, 215, 222;
+    --text:         #1c2128;
+    --text-sec:     #3d444d;
+    --muted:        #656d76;
+    --accent:       #ff2d78;
+    --accent-rgb:   255, 45, 120;
+    --info-bg:      #ddf4ff;
+    --info-border:  #54aeff;
+    --info-text:    #0969da;
+    --shadow:       rgba(0, 0, 0, 0.08);
+    color-scheme: light;
+}

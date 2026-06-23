@@ -1,0 +1,628 @@
+$accent:  #ff2d78;
+$bg:      #0d1117;
+$bg-card: #161b22;
+$bg-input:#1e2535;
+$border:  #2a3348;
+$text:    #e6edf3;
+$muted:   #7d8590;
+$font:    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+main {
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    font-family: $font;
+    background: $bg;
+    position: relative;
+    overflow: hidden;
+}
+
+// ── Left Panel ────────────────────────────────────────────────────────────────
+.auth-left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 2.5rem 3rem;
+    background: $bg-card;
+    border-right: 1px solid $border;
+    position: relative;
+    overflow: hidden;
+
+    // decorative glow
+    &::before {
+        content: '';
+        position: absolute;
+        top: -80px;
+        left: -80px;
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle, rgba($accent, 0.1) 0%, transparent 65%);
+        pointer-events: none;
+        animation: float-blob 9s ease-in-out infinite;
+    }
+
+    &::after {
+        content: '';
+        position: absolute;
+        bottom: -60px;
+        right: -60px;
+        width: 300px;
+        height: 300px;
+        background: radial-gradient(circle, rgba(88,166,255,0.07) 0%, transparent 65%);
+        pointer-events: none;
+        animation: float-blob 12s ease-in-out infinite reverse;
+    }
+
+    // dot grid
+    background-image:
+        linear-gradient($bg-card, $bg-card),
+        radial-gradient(rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 100%, 24px 24px;
+    background-blend-mode: normal;
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+
+        h2 {
+            font-size: clamp(2rem, 4vw, 2.75rem);
+            font-weight: 900;
+            color: $text;
+            margin: 0;
+            line-height: 1.15;
+            letter-spacing: -0.03em;
+
+            span {
+                background: linear-gradient(135deg, $accent, #ff8fab);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+            }
+        }
+
+        > p {
+            color: $muted;
+            font-size: 1rem;
+            line-height: 1.65;
+            margin: 0;
+            max-width: 360px;
+        }
+    }
+
+    &__quote {
+        position: relative;
+        z-index: 1;
+        p {
+            font-size: 0.85rem;
+            color: lighten($muted, 10%);
+            font-style: italic;
+            line-height: 1.6;
+            margin: 0;
+            padding-left: 1rem;
+            border-left: 2px solid rgba($accent, 0.4);
+        }
+    }
+
+    &__stats {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        position: relative;
+        z-index: 1;
+    }
+}
+
+// ── Brand ─────────────────────────────────────────────────────────────────────
+.auth-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: $text;
+    text-decoration: none;
+    letter-spacing: -0.01em;
+    position: relative;
+    z-index: 1;
+}
+
+// ── Feature List ──────────────────────────────────────────────────────────────
+.auth-features {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+
+    li {
+        display: flex;
+        align-items: flex-start;
+        gap: 0.65rem;
+        font-size: 0.9rem;
+        color: lighten($muted, 15%);
+        line-height: 1.5;
+    }
+
+    &__icon {
+        color: $accent;
+        font-size: 0.7rem;
+        flex-shrink: 0;
+        margin-top: 4px;
+    }
+}
+
+// ── Stats ─────────────────────────────────────────────────────────────────────
+.auth-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+
+    &__num {
+        font-size: 1.4rem;
+        font-weight: 800;
+        color: $accent;
+        line-height: 1;
+    }
+
+    &__label {
+        font-size: 0.72rem;
+        color: $muted;
+        white-space: nowrap;
+    }
+
+    &__divider {
+        width: 1px;
+        height: 32px;
+        background: $border;
+    }
+}
+
+// ── Right Panel ───────────────────────────────────────────────────────────────
+.auth-right {
+    width: 480px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+
+    // subtle right glow
+    &::before {
+        content: '';
+        position: absolute;
+        bottom: -100px;
+        right: -100px;
+        width: 350px;
+        height: 350px;
+        background: radial-gradient(circle, rgba($accent, 0.06) 0%, transparent 65%);
+        pointer-events: none;
+    }
+}
+
+// ── Form Container ────────────────────────────────────────────────────────────
+.form-container {
+    width: 100%;
+    max-width: 380px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    position: relative;
+    z-index: 1;
+}
+
+.form-heading {
+    h1 {
+        margin: 0 0 0.3rem;
+        font-size: 1.75rem;
+        font-weight: 800;
+        color: $text;
+        letter-spacing: -0.02em;
+    }
+}
+
+.form-sub {
+    margin: 0 !important;
+    font-size: 0.875rem !important;
+    color: $muted !important;
+}
+
+// ── Form ─────────────────────────────────────────────────────────────────────
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+// ── Input Group ───────────────────────────────────────────────────────────────
+.input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+
+    label {
+        font-size: 0.78rem;
+        font-weight: 600;
+        color: $muted;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    input {
+        border: 1px solid $border;
+        outline: none;
+        padding: 0.75rem 1rem;
+        border-radius: 0.65rem;
+        background: $bg-input;
+        color: $text;
+        font-size: 0.95rem;
+        font-family: $font;
+        transition: border-color 0.2s, box-shadow 0.2s;
+
+        &::placeholder { color: #3d4f6b; }
+
+        &:focus {
+            border-color: $accent;
+            box-shadow: 0 0 0 3px rgba($accent, 0.1);
+        }
+    }
+}
+
+// ── Primary Button ────────────────────────────────────────────────────────────
+.primary-button {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background: linear-gradient(135deg, $accent 0%, darken($accent, 12%) 100%);
+    color: #fff;
+    font-size: 0.95rem;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.65rem;
+    cursor: pointer;
+    font-family: $font;
+    letter-spacing: 0.01em;
+    transition: opacity 0.15s, transform 0.1s, box-shadow 0.2s;
+    box-shadow: 0 4px 20px rgba($accent, 0.35);
+
+    &:hover:not(:disabled) {
+        opacity: 0.92;
+        box-shadow: 0 6px 28px rgba($accent, 0.45);
+    }
+    &:active  { transform: scale(0.98); }
+    &:disabled{ opacity: 0.5; cursor: not-allowed; }
+}
+
+// ── Error / Success ───────────────────────────────────────────────────────────
+.form-error {
+    background: rgba($accent, 0.08);
+    border: 1px solid rgba($accent, 0.3);
+    color: #ff6b9d;
+    padding: 0.65rem 1rem;
+    border-radius: 0.55rem;
+    font-size: 0.85rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+.form-success {
+    background: rgba(63, 185, 80, 0.08);
+    border: 1px solid rgba(63, 185, 80, 0.3);
+    color: #3fb950;
+    padding: 0.65rem 1rem;
+    border-radius: 0.55rem;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+// ── Footer link ───────────────────────────────────────────────────────────────
+.form-footer {
+    margin: 0 !important;
+    font-size: 0.85rem !important;
+    color: $muted !important;
+    text-align: center;
+}
+
+p { margin: 0; }
+
+a {
+    color: $accent;
+    text-decoration: none;
+    font-weight: 600;
+    &:hover { text-decoration: underline; }
+}
+
+// ── OTP Page (full redesign) ──────────────────────────────────────────────────
+main.otp-page {
+    min-height: 100vh;
+    width: 100%;
+    background: $bg;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 2rem 1rem;
+    position: relative;
+    overflow: hidden;
+}
+
+// blobs
+.otp-blob {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+
+    &--1 {
+        width: 500px; height: 500px;
+        top: -150px; left: -150px;
+        background: radial-gradient(circle, rgba($accent, 0.08) 0%, transparent 65%);
+        animation: float-blob 10s ease-in-out infinite;
+    }
+    &--2 {
+        width: 400px; height: 400px;
+        bottom: -120px; right: -100px;
+        background: radial-gradient(circle, rgba(88,166,255,0.07) 0%, transparent 65%);
+        animation: float-blob 13s ease-in-out infinite reverse;
+    }
+    &--3 {
+        width: 250px; height: 250px;
+        top: 50%; right: 15%;
+        background: radial-gradient(circle, rgba($accent, 0.05) 0%, transparent 65%);
+        animation: float-blob 8s ease-in-out infinite 2s;
+    }
+}
+
+// step bar
+.otp-steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    z-index: 1;
+
+    &__item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+
+        span {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            border: 2px solid $border;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 0.8rem; font-weight: 700;
+            color: $muted;
+            background: $bg-card;
+        }
+        p {
+            font-size: 0.7rem;
+            color: $muted;
+            white-space: nowrap;
+        }
+
+        &--done span {
+            background: rgba($accent, 0.15);
+            border-color: rgba($accent, 0.4);
+            color: $accent;
+        }
+        &--active span {
+            background: $accent;
+            border-color: $accent;
+            color: #fff;
+            box-shadow: 0 0 14px rgba($accent, 0.5);
+        }
+        &--active p { color: $text; font-weight: 600; }
+    }
+
+    &__line {
+        width: 60px; height: 2px;
+        background: $border;
+        margin: 0 0.25rem;
+        margin-bottom: 18px;
+    }
+}
+
+// card
+.otp-card {
+    width: 100%;
+    max-width: 420px;
+    background: $bg-card;
+    border: 1px solid $border;
+    border-radius: 1.25rem;
+    padding: 2.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
+    position: relative;
+    z-index: 1;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4), 0 0 0 1px rgba($accent, 0.05);
+
+    &__bar {
+        position: absolute;
+        top: 0; left: 0; right: 0;
+        height: 3px;
+        border-radius: 1.25rem 1.25rem 0 0;
+        background: linear-gradient(90deg, $accent, #ff8fab, #a855f7);
+    }
+
+    &__icon {
+        width: 56px; height: 56px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, $accent, darken($accent, 15%));
+        display: flex; align-items: center; justify-content: center;
+        box-shadow: 0 8px 24px rgba($accent, 0.35);
+        flex-shrink: 0;
+    }
+
+    &__title {
+        margin: 0;
+        font-size: 1.6rem;
+        font-weight: 800;
+        color: $text;
+        letter-spacing: -0.02em;
+    }
+
+    &__sub {
+        margin: 0;
+        font-size: 0.875rem;
+        color: $muted;
+        text-align: center;
+        line-height: 1.7;
+        strong { color: $text; }
+    }
+}
+
+// progress dots
+.otp-progress {
+    display: flex;
+    gap: 0.4rem;
+
+    &__dot {
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: $border;
+        transition: background 0.2s, transform 0.2s;
+        &--on {
+            background: $accent;
+            transform: scale(1.25);
+        }
+    }
+}
+
+// inputs
+.otp-inputs {
+    display: flex;
+    gap: 0.55rem;
+    justify-content: center;
+}
+
+.otp-input {
+    width: 52px; height: 60px;
+    text-align: center;
+    font-size: 1.6rem;
+    font-weight: 700;
+    border-radius: 0.75rem;
+    border: 2px solid $border;
+    background: $bg-input;
+    color: $text;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+    font-family: $font;
+    caret-color: $accent;
+
+    &:focus {
+        border-color: $accent;
+        box-shadow: 0 0 0 3px rgba($accent, 0.12);
+        transform: translateY(-2px);
+    }
+    &--filled {
+        border-color: rgba($accent, 0.6);
+        background: rgba($accent, 0.05);
+    }
+}
+
+// submit button inside card
+.otp-submit {
+    width: 100%;
+    margin-top: 0.25rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+// circular timer
+.otp-timer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-size: 0.82rem;
+    color: $muted;
+
+    &__ring { flex-shrink: 0; }
+}
+
+.resend-btn {
+    background: none;
+    border: 2px solid rgba($accent, 0.35);
+    color: $accent;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-family: $font;
+    padding: 0.45rem 1.1rem;
+    border-radius: 2rem;
+    font-weight: 600;
+    transition: background 0.15s, border-color 0.15s;
+    &:hover {
+        background: rgba($accent, 0.08);
+        border-color: $accent;
+    }
+}
+
+.otp-back {
+    font-size: 0.82rem;
+    color: $muted;
+    text-decoration: none;
+    transition: color 0.15s;
+    &:hover { color: $text; }
+}
+
+.otp-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: $muted;
+    text-decoration: none;
+    position: relative;
+    z-index: 1;
+    &:hover { color: $text; }
+}
+
+// spinner inside button
+.btn-spinner {
+    width: 14px; height: 14px;
+    border: 2px solid rgba(#fff, 0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    display: inline-block;
+    animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+// ── Animations ────────────────────────────────────────────────────────────────
+@keyframes float-blob {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33%       { transform: translate(30px, -25px) scale(1.04); }
+    66%       { transform: translate(-15px, 15px) scale(0.96); }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+    main { flex-direction: column; }
+
+    .auth-left {
+        padding: 1.5rem;
+        border-right: none;
+        border-bottom: 1px solid $border;
+
+        &__content h2 { font-size: 1.75rem; }
+        &__quote, &__stats { display: none; }
+    }
+
+    .auth-right {
+        width: 100%;
+        padding: 2rem 1.5rem;
+    }
+}
