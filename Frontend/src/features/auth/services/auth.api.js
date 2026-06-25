@@ -1,10 +1,4 @@
-import axios from "axios"
-
-const api = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
-    withCredentials: true,
-    timeout: 60000
-})
+import api from "../../../utils/api";
 
 export async function register({ username, email, password }) {
     const response = await api.post('/api/auth/register', { username, email, password })
@@ -18,6 +12,7 @@ export async function login({ email, password }) {
 
 export async function logout() {
     const response = await api.post("/api/auth/logout")
+    localStorage.removeItem("token")
     return response.data
 }
 
@@ -28,6 +23,9 @@ export async function getMe() {
 
 export async function verifyOtp({ email, otp }) {
     const response = await api.post("/api/auth/verify-otp", { email, otp })
+    if (response.data.token) {
+        localStorage.setItem("token", response.data.token)
+    }
     return response.data
 }
 

@@ -2,7 +2,10 @@ const jwt = require("jsonwebtoken");
 const tokenBlacklistModel = require("../model/blacklist.model");
 
 async function authUser(req, res, next) {
-    const token = req.cookies.token;
+    const authHeader = req.headers.authorization;
+    const token = (authHeader && authHeader.startsWith("Bearer "))
+        ? authHeader.slice(7)
+        : req.cookies.token;
 
     if (!token) {
         return res.status(401).json({ message: "token is missing" });

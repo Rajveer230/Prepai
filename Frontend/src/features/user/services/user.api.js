@@ -1,16 +1,11 @@
-import axios from "axios";
-
-const API = axios.create({
-    baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
-    withCredentials: true,
-});
+import api from "../../../utils/api";
 
 export const fetchProfileStats = async () => {
-    const { data } = await API.get("/api/user/stats");
+    const { data } = await api.get("/api/user/stats");
     return data;
 };
 
 export const changePassword = async (payload) => {
-    const { data } = await API.put("/api/user/change-password", payload);
+    const { data } = await api.put("/api/user/change-password", payload);
     return data;
 };
