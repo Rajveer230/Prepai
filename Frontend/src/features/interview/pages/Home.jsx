@@ -3,10 +3,12 @@ import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router-dom'
 import { usePageTitle } from '../../../utils/usePageTitle'
+import { useToast } from '../../../utils/toast'
 
 const Home = () => {
 
     usePageTitle('Dashboard')
+    const { showToast, showConfirm } = useToast()
     const { loading, generateReport, reports, getReports, deleteReport } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
@@ -22,11 +24,11 @@ const Home = () => {
     const handleFileChange = (file) => {
         if (!file) return
         if (file.type !== 'application/pdf') {
-            alert('Only PDF files are supported.')
+            showToast('Only PDF files are supported.')
             return
         }
         if (file.size > 5 * 1024 * 1024) {
-            alert('File size must be under 5MB.')
+            showToast('File size must be under 5MB.')
             return
         }
         setSelectedFile(file)

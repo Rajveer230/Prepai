@@ -1,10 +1,12 @@
 import { useState } from "react"
 import { startMockSession, submitAnswer, getSession } from "../services/mock.api"
+import { useToast } from "../../../utils/toast"
 
 export const useMock = () => {
     const [session, setSession]       = useState(null)
     const [evaluation, setEvaluation] = useState(null)
     const [loading, setLoading]       = useState(true)
+    const { showToast } = useToast()
 
     const startSession = async (reportId) => {
         setLoading(true)
@@ -13,7 +15,7 @@ export const useMock = () => {
             setSession(data.session)
             return data.session
         } catch (err) {
-            alert(err?.response?.data?.message || "Failed to start mock interview")
+            showToast(err?.response?.data?.message || "Failed to start mock interview")
             return null
         } finally {
             setLoading(false)
@@ -34,7 +36,7 @@ export const useMock = () => {
             }))
             return data
         } catch (err) {
-            alert(err?.response?.data?.message || "Failed to submit answer")
+            showToast(err?.response?.data?.message || "Failed to submit answer")
             return null
         } finally {
             setLoading(false)
@@ -47,7 +49,7 @@ export const useMock = () => {
             const data = await getSession(sessionId)
             setSession(data.session)
         } catch (err) {
-            alert(err?.response?.data?.message || "Session not found")
+            showToast(err?.response?.data?.message || "Session not found")
         } finally {
             setLoading(false)
         }

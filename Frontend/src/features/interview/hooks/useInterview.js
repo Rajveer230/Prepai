@@ -1,17 +1,14 @@
 import { getAllInterviewReports, generateInterviewReport, getInterviewReportById, generateResumePdf, deleteInterviewReport } from "../services/interview.api"
 import { useContext } from "react"
 import { InterviewContext } from "../interview.context"
-
+import { useToast } from "../../../utils/toast"
 
 export const useInterview = () => {
-
     const context = useContext(InterviewContext)
-
-    if (!context) {
-        throw new Error("useInterview must be used within an InterviewProvider")
-    }
+    if (!context) throw new Error("useInterview must be used within an InterviewProvider")
 
     const { loading, setLoading, report, setReport, reports, setReports } = context
+    const { showToast } = useToast()
 
     const generateReport = async ({ jobDescription, selfDescription, resumeFile }) => {
         setLoading(true)
@@ -20,8 +17,7 @@ export const useInterview = () => {
             setReport(response.interviewReport)
             return response.interviewReport
         } catch (error) {
-            console.error("generateReport error:", error)
-            alert(error?.response?.data?.message || "Failed to generate report. Check console for details.")
+            showToast(error?.response?.data?.message || "Failed to generate report.")
             return null
         } finally {
             setLoading(false)
@@ -35,7 +31,7 @@ export const useInterview = () => {
             setReport(response.interviewReport)
             return response.interviewReport
         } catch (error) {
-            console.error("getReportById error:", error)
+            showToast(error?.response?.data?.message || "Failed to load report.")
             return null
         } finally {
             setLoading(false)
@@ -49,7 +45,7 @@ export const useInterview = () => {
             setReports(response.interviewReports)
             return response.interviewReports
         } catch (error) {
-            console.error("getReports error:", error)
+            showToast(error?.response?.data?.message || "Failed to load reports.")
             return null
         } finally {
             setLoading(false)
@@ -58,10 +54,9 @@ export const useInterview = () => {
 
     const getResumePdf = async (interviewReportId) => {
         setLoading(true)
-        let response = null
         try {
-            response = await generateResumePdf({ interviewReportId })
-            const url = window.URL.createObjectURL(new Blob([ response ], { type: "application/pdf" }))
+            const response = await generateResumePdf({ interviewReportId })
+            const url = window.URL.createObjectURL(new Blob([response], { type: "application/pdf" }))
             const link = document.createElement("a")
             link.href = url
             const title = report?.title || "interview-plan"
@@ -69,9 +64,8 @@ export const useInterview = () => {
             link.setAttribute("download", `${slug}.pdf`)
             document.body.appendChild(link)
             link.click()
-        }
-        catch (error) {
-            console.log(error)
+        } catch (error) {
+            showToast("Failed to download PDF.")
         } finally {
             setLoading(false)
         }
@@ -81,8 +75,9 @@ export const useInterview = () => {
         try {
             await deleteInterviewReport(interviewId)
             setReports(prev => prev.filter(r => r._id !== interviewId))
+            showToast("Interview plan deleted.", "success")
         } catch (error) {
-            alert(error?.response?.data?.message || "Failed to delete report.")
+            showToast(error?.response?.data?.message || "Failed to delete report.")
         }
     }
 
