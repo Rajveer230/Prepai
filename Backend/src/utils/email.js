@@ -8,6 +8,10 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
     },
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 15000,
+    family: 4,
 });
 
 async function sendOtpEmail(to, otp, type) {
@@ -28,12 +32,19 @@ async function sendOtpEmail(to, otp, type) {
         </p>
     </div>`;
 
-    await transporter.sendMail({
+    const mailOptions = {
         from: `"PrepAI" <${process.env.EMAIL_USER}>`,
         to,
         subject,
         html,
-    });
+    };
+
+    await Promise.race([
+        transporter.sendMail(mailOptions),
+        new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Email timed out after 20s")), 20000)
+        ),
+    ]);
 }
 
 module.exports = { sendOtpEmail };
