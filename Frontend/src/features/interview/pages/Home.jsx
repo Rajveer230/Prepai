@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Home = () => {
 
-    const { loading, generateReport, reports, getReports } = useInterview()
+    const { loading, generateReport, reports, getReports, deleteReport } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")
     const [ selectedFile, setSelectedFile ] = useState(null)
@@ -184,7 +184,7 @@ const Home = () => {
                 ) : (
                     <ul className='reports-list'>
                         {reports.map(report => (
-                            <li key={report._id} className='report-item' onClick={() => navigate(`/interview/${report._id}`)}>
+                            <li key={report._id} className='report-item'>
                                 <h3>{report.title || 'Untitled Position'}</h3>
                                 <p className='report-meta'>Generated on {new Date(report.createdAt).toLocaleDateString()}</p>
                                 <p className={`report-score ${report.matchScore >= 80 ? 'score--high' : report.matchScore >= 60 ? 'score--mid' : 'score--low'}`}>

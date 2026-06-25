@@ -6,6 +6,7 @@ const {
     getAllReportsController,
     getReportByIdController,
     generateResumePdfController,
+    deleteReportController,
 } = require("../controller/interview.controller");
 
 const interviewRouter = Router();
@@ -24,5 +25,6 @@ interviewRouter.post("/", upload.single("resume"), generateReportController);
 interviewRouter.get("/", getAllReportsController);
 interviewRouter.get("/report/:id", getReportByIdController);
 interviewRouter.post("/resume/pdf/:id", generateResumePdfController);
+interviewRouter.delete("/report/:id", deleteReportController);
 
 module.exports = interviewRouter;
