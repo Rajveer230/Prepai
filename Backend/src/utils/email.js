@@ -1,20 +1,24 @@
 const nodemailer = require("nodemailer");
-
-const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-    },
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 15000,
-    family: 4,
-});
+const { lookup } = require("dns").promises;
 
 async function sendOtpEmail(to, otp, type) {
+    // Render free tier has no IPv6 outbound — resolve to IPv4 explicitly
+    const { address: smtpHost } = await lookup("smtp.gmail.com", { family: 4 });
+
+    const transporter = nodemailer.createTransport({
+        host: smtpHost,
+        port: 587,
+        secure: false,
+        auth: {
+            user: process.env.EMAIL_USER,
+            pass: process.env.EMAIL_PASS,
+        },
+        tls: { servername: "smtp.gmail.com" },
+        connectionTimeout: 10000,
+        greetingTimeout: 10000,
+        socketTimeout: 15000,
+    });
+
     const isRegister = type === "register";
     const subject = isRegister ? "Verify your PrepAI account" : "Your PrepAI login OTP";
 
@@ -32,15 +36,13 @@ async function sendOtpEmail(to, otp, type) {
         </p>
     </div>`;
 
-    const mailOptions = {
-        from: `"PrepAI" <${process.env.EMAIL_USER}>`,
-        to,
-        subject,
-        html,
-    };
-
     await Promise.race([
-        transporter.sendMail(mailOptions),
+        transporter.sendMail({
+            from: `"PrepAI" <${process.env.EMAIL_USER}>`,
+            to,
+            subject,
+            html,
+        }),
         new Promise((_, reject) =>
             setTimeout(() => reject(new Error("Email timed out after 20s")), 20000)
         ),
