@@ -64,7 +64,9 @@ export const useInterview = () => {
             const url = window.URL.createObjectURL(new Blob([ response ], { type: "application/pdf" }))
             const link = document.createElement("a")
             link.href = url
-            link.setAttribute("download", `resume_${interviewReportId}.pdf`)
+            const title = report?.title || "interview-plan"
+            const slug = title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "")
+            link.setAttribute("download", `${slug}.pdf`)
             document.body.appendChild(link)
             link.click()
         }

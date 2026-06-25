@@ -1,4 +1,5 @@
 import React from 'react'
+import { usePageTitle } from '../utils/usePageTitle'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../features/auth/hooks/useAuth'
 import './landing.scss'
@@ -167,7 +168,7 @@ const Landing = () => {
             {/* ── CTA Banner ── */}
             <section className='cta-banner'>
                 <h2>Ready to land your dream job?</h2>
-                <p>Join thousands of candidates who prepare smarter with PrepAI</p>
+                <p>Start preparing smarter and walk into your next interview with confidence</p>
                 {user ? (
                     <button className='btn-primary btn-primary--lg' onClick={() => navigate('/dashboard')}>Go to Dashboard →</button>
                 ) : (
@@ -177,7 +178,7 @@ const Landing = () => {
 
             {/* ── Footer ── */}
             <footer className='land-footer'>
-                <span>© 2025 PrepAI — AI Interview Preparation</span>
+                <span>© 2026 PrepAI — AI Interview Preparation</span>
                 <div className='land-footer__links'>
                     <a href='#'>Privacy</a>
                     <a href='#'>Terms</a>

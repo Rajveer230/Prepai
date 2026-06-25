@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useMock } from '../hooks/useMock'
 import { analyzeNervousness } from '../utils/nervousness'
 import '../style/mockInterview.scss'
+import { usePageTitle } from '../../../utils/usePageTitle'
 
 const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition
 
@@ -229,6 +230,7 @@ const ResultScreen = ({ session, nervousnessHistory, onBack }) => {
 
 // ── Main Component ────────────────────────────────────────────────────────────
 const MockInterview = () => {
+    usePageTitle('Mock Interview')
     const { sessionId } = useParams()
     const navigate = useNavigate()
     const { session, loading, evaluation, fetchSession, submitUserAnswer, clearEvaluation } = useMock()

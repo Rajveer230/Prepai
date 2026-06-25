@@ -2,8 +2,10 @@ import React, { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import "../auth.form.scss"
 import { useAuth } from '../hooks/useAuth'
+import { usePageTitle } from '../../../utils/usePageTitle'
 
 const Login = () => {
+    usePageTitle('Login')
     const { handleLogin } = useAuth()
     const navigate = useNavigate()
 

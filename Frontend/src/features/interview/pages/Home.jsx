@@ -2,9 +2,11 @@ import React, { useState, useRef, useEffect } from 'react'
 import "../style/home.scss"
 import { useInterview } from '../hooks/useInterview.js'
 import { useNavigate } from 'react-router-dom'
+import { usePageTitle } from '../../../utils/usePageTitle'
 
 const Home = () => {
 
+    usePageTitle('Dashboard')
     const { loading, generateReport, reports, getReports, deleteReport } = useInterview()
     const [ jobDescription, setJobDescription ] = useState("")
     const [ selfDescription, setSelfDescription ] = useState("")

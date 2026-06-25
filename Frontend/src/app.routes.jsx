@@ -8,6 +8,7 @@ import Home from "./features/interview/pages/Home";
 import Interview from "./features/interview/pages/interview";
 import MockInterview from "./features/interview/pages/MockInterview";
 import Profile from "./features/user/pages/Profile";
+import NotFound from "./pages/NotFound";
 
 export const router = createBrowserRouter([
     {
@@ -41,5 +42,9 @@ export const router = createBrowserRouter([
     {
         path: "/profile",
         element: <Protected><Profile /></Protected>
+    },
+    {
+        path: "*",
+        element: <NotFound />
     }
 ])
