@@ -2,15 +2,6 @@ const userModel = require("../model/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const tokenBlacklistmodel = require("../model/blacklist.model");
-const { sendOtpEmail } = require("../utils/email");
-
-function generateOtp() {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-}
-
-function getOtpExpiry() {
-    return new Date(Date.now() + 10 * 60 * 1000);
-}
 
 function generateToken(user) {
     return jwt.sign(
@@ -39,36 +30,25 @@ const registerUsercontroller = async (req, res) => {
         }
 
         const existingEmail = await userModel.findOne({ email });
-
-        if (existingEmail && existingEmail.isVerified) {
+        if (existingEmail) {
             return res.status(400).json({ message: "Email already registered" });
         }
 
-        const takenUsername = await userModel.findOne({ username, isVerified: true });
+        const takenUsername = await userModel.findOne({ username });
         if (takenUsername) {
             return res.status(400).json({ message: "Username already taken" });
         }
 
-        const otp = generateOtp();
-        const otpExpiry = getOtpExpiry();
         const hashPassword = await bcrypt.hash(password, 10);
+        const user = await userModel.create({ username, email, password: hashPassword, isVerified: true });
 
-        if (existingEmail && !existingEmail.isVerified) {
-            await userModel.findByIdAndUpdate(existingEmail._id, {
-                username,
-                password: hashPassword,
-                otp,
-                otpExpiry,
-            });
-        } else {
-            await userModel.create({ username, email, password: hashPassword, otp, otpExpiry });
-        }
-
-        await sendOtpEmail(email, otp, "register");
+        const token = generateToken(user);
+        setTokenCookie(res, token);
 
         res.status(201).json({
-            message: "OTP sent to your email. Please verify your account.",
-            email,
+            message: "Account created successfully",
+            token,
+            user: { id: user._id, username: user.username, email: user.email },
         });
     } catch (error) {
         console.error(error);
@@ -94,90 +74,14 @@ const loginUsercontroller = async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials" });
         }
 
-        const otp = generateOtp();
-        const otpExpiry = getOtpExpiry();
-        await userModel.findByIdAndUpdate(user._id, { otp, otpExpiry });
-
-        const type = user.isVerified ? "login" : "register";
-        await sendOtpEmail(email, otp, type);
-
-        const message = user.isVerified
-            ? "OTP sent to your email."
-            : "Account not verified. OTP sent to your email.";
-
-        res.status(200).json({ message, requiresOtp: true });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-};
-
-const verifyOtpController = async (req, res) => {
-    try {
-        const { email, otp } = req.body;
-
-        if (!email || !otp) {
-            return res.status(400).json({ message: "Email and OTP are required" });
-        }
-
-        const user = await userModel.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        if (!user.otp || user.otp !== otp) {
-            return res.status(400).json({ message: "Invalid OTP" });
-        }
-
-        if (user.otpExpiry < new Date()) {
-            return res.status(400).json({ message: "OTP has expired. Please request a new one." });
-        }
-
-        await userModel.findByIdAndUpdate(user._id, {
-            isVerified: true,
-            otp: null,
-            otpExpiry: null,
-        });
-
         const token = generateToken(user);
         setTokenCookie(res, token);
 
         res.status(200).json({
-            message: "Verified successfully",
+            message: "Logged in successfully",
             token,
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-            },
+            user: { id: user._id, username: user.username, email: user.email },
         });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: "Internal server error" });
-    }
-};
-
-const resendOtpController = async (req, res) => {
-    try {
-        const { email } = req.body;
-
-        if (!email) {
-            return res.status(400).json({ message: "Email is required" });
-        }
-
-        const user = await userModel.findOne({ email });
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        const otp = generateOtp();
-        const otpExpiry = getOtpExpiry();
-        await userModel.findByIdAndUpdate(user._id, { otp, otpExpiry });
-
-        const type = user.isVerified ? "login" : "register";
-        await sendOtpEmail(email, otp, type);
-
-        res.status(200).json({ message: "OTP resent successfully" });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: "Internal server error" });
@@ -224,6 +128,4 @@ module.exports = {
     loginUsercontroller,
     logoutUsercontroller,
     getMecontroller,
-    verifyOtpController,
-    resendOtpController,
 };

@@ -20,7 +20,7 @@ const Login = () => {
         setSubmitting(true)
         try {
             await handleLogin({ email, password })
-            navigate('/verify-otp', { state: { email, type: 'login' } })
+            navigate('/dashboard')
         } catch (err) {
             setError(err.message)
         } finally {
@@ -88,7 +88,7 @@ const Login = () => {
                                 type="password" id="password" placeholder='Enter your password' required />
                         </div>
                         <button className='primary-button' disabled={submitting}>
-                            {submitting ? 'Sending OTP...' : 'Continue →'}
+                            {submitting ? 'Logging in...' : 'Login →'}
                         </button>
                     </form>
 

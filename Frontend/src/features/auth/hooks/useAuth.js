@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { AuthContext } from "../auth.context";
-import { login, register, logout, verifyOtp, resendOtp } from "../services/auth.api";
+import { login, register, logout } from "../services/auth.api";
 
 export const useAuth = () => {
 
@@ -11,6 +11,8 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await login({ email, password })
+            if (data.token) localStorage.setItem("token", data.token)
+            setUser(data.user)
             return data
         } catch (err) {
             const message = err?.response?.data?.message || "Login failed. Check your credentials."
@@ -24,36 +26,14 @@ export const useAuth = () => {
         setLoading(true)
         try {
             const data = await register({ username, email, password })
+            if (data.token) localStorage.setItem("token", data.token)
+            setUser(data.user)
             return data
         } catch (err) {
             const message = err?.response?.data?.message || "Registration failed."
             throw new Error(message)
         } finally {
             setLoading(false)
-        }
-    }
-
-    const handleVerifyOtp = async ({ email, otp }) => {
-        setLoading(true)
-        try {
-            const data = await verifyOtp({ email, otp })
-            setUser(data.user)
-            return true
-        } catch (err) {
-            const message = err?.response?.data?.message || "Verification failed."
-            throw new Error(message)
-        } finally {
-            setLoading(false)
-        }
-    }
-
-    const handleResendOtp = async ({ email }) => {
-        try {
-            await resendOtp({ email })
-            return true
-        } catch (err) {
-            const message = err?.response?.data?.message || "Failed to resend OTP."
-            throw new Error(message)
         }
     }
 
@@ -69,5 +49,5 @@ export const useAuth = () => {
         }
     }
 
-    return { user, loading, handleRegister, handleLogin, handleVerifyOtp, handleResendOtp, handleLogout }
+    return { user, loading, handleRegister, handleLogin, handleLogout }
 }

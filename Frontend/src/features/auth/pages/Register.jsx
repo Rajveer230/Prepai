@@ -21,7 +21,7 @@ const Register = () => {
         setSubmitting(true)
         try {
             await handleRegister({ username, email, password })
-            navigate('/verify-otp', { state: { email, type: 'register' } })
+            navigate('/dashboard')
         } catch (err) {
             setError(err.message)
         } finally {
