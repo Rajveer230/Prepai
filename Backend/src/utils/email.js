@@ -1,6 +1,14 @@
-const { Resend } = require("resend");
+const nodemailer = require("nodemailer");
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+const transporter = nodemailer.createTransport({
+    host: "smtp-relay.brevo.com",
+    port: 587,
+    secure: false,
+    auth: {
+        user: process.env.BREVO_SMTP_USER,
+        pass: process.env.BREVO_SMTP_KEY,
+    },
+});
 
 async function sendOtpEmail(to, otp, type) {
     const isRegister = type === "register";
@@ -20,14 +28,12 @@ async function sendOtpEmail(to, otp, type) {
         </p>
     </div>`;
 
-    const { error } = await resend.emails.send({
-        from: "PrepAI <onboarding@resend.dev>",
+    await transporter.sendMail({
+        from: '"PrepAI" <rajveersingh230310@gmail.com>',
         to,
         subject,
         html,
     });
-
-    if (error) throw new Error(error.message);
 }
 
 module.exports = { sendOtpEmail };
